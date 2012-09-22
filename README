@@ -1,0 +1,6 @@
+To install puppet on a fresh raspberry pi:
+
+1) ssh pi@raspberrypi
+2) sudo apt-get install puppet-common
+3) sudo apt-get install git
+4) sudo git clone git://github.com/yorrick/puppet.git
