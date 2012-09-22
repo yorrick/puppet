@@ -20,6 +20,7 @@ pi      ALL=(ALL) NOPASSWD: ALL
 # (Note that later entries override this, so you might need to move
 # it further down)
 %sudo ALL=(ALL) ALL
+# all members of pi group can execute any command
 %pi   ALL=(ALL) NOPASSWD: ALL
 #
 #includedir /etc/sudoers.d
