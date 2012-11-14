@@ -39,6 +39,11 @@ ssh_authorized_key { "yorrick-rsa-key":
 package { "git":
     ensure => "latest"
 }
+
 package { "vim":
+    ensure => "latest"
+}
+
+package { "motion":
     ensure => "latest"
 }
