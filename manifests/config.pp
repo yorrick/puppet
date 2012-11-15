@@ -47,3 +47,7 @@ package { "vim":
 package { "motion":
     ensure => "latest"
 }
+
+package { "motion":
+    ensure => "upstart"
+}
