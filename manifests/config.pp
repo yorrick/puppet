@@ -48,6 +48,6 @@ package { "motion":
     ensure => "latest"
 }
 
-package { "motion":
-    ensure => "upstart"
+package { "upstart":
+    ensure => "latest"
 }
