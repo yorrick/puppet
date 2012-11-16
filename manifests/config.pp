@@ -51,3 +51,10 @@ package { "htop":
 package { "motion":
     ensure => "latest"
 }
+
+file { '/etc/default/motion':
+    owner => 'root',
+    group => 'root',
+    mode => 0640,
+    source => "puppet:///modules/sudo/default-motion",
+}
