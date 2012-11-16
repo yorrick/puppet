@@ -44,10 +44,10 @@ package { "vim":
     ensure => "latest"
 }
 
-package { "motion":
+package { "htop":
     ensure => "latest"
 }
 
-package { "upstart":
+package { "motion":
     ensure => "latest"
 }
