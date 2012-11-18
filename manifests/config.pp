@@ -52,6 +52,10 @@ package { "motion":
     ensure => "latest"
 }
 
+package { "python-virtualenv":
+    ensure => "latest"
+}
+
 file { '/etc/default/motion':
     owner => 'root',
     group => 'root',
