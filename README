@@ -15,4 +15,4 @@ To update raspberry pi:
 - ssh yorrick@raspberrypi
 - cd /etc/puppet
 - sudo git pull 
-- sudo puppet apply /etc/puppet/manifests/config.pp 
+- sudo puppet apply /etc/puppet/manifests/config.pp --verbose
