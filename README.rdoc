@@ -1,0 +1,5 @@
+= puppet-puppet module
+
+{<img src='https://codex.cegeka.be/jenkins/job/puppet-puppet/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-puppet/]
+
+This is the puppet module.
