@@ -2,4 +2,4 @@
 
 {<img src='https://codex.cegeka.be/jenkins/job/puppet-puppet/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-puppet/]
 
-This is the puppet module.
+This module manages puppet itself and reporting functionality.
