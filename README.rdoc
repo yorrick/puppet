@@ -2,4 +2,13 @@
 
 {<img src='https://codex.cegeka.be/jenkins/job/puppet-puppet/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-puppet/]
 
-This module manages puppet itself and reporting functionality.
+This module manages puppet and provides reporting functionality. You can setup your Puppet Master and Puppet Agents to use reporting.  Currently 'Foreman' reporting is implemented.
+
+== Recommende usage
+
+  puppet::foreman::config::puppetmaster { 'configure master reporting':
+    foreman_url => 'http://foo.example.com',
+  }
+
+  puppet::foreman::config::puppetagent { 'configure agent reporting': }
+
