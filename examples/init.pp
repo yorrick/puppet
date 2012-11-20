@@ -1,4 +1,6 @@
 
+include puppet::config::puppetmaster
+
 puppet::foreman::config::puppetmaster { 'configure puppetmaster':
     foreman_url => 'http://localhost',
 }
