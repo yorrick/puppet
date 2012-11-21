@@ -76,3 +76,10 @@ file { '/home/yorrick/.vimrc':
     mode => 0644,
     source => "puppet:///modules/environment/.vimrc",
 }
+
+file { '/home/yorrick/.gitconfig':
+    owner => 'yorrick',
+    group => 'yorrick',
+    mode => 0644,
+    source => "puppet:///modules/environment/.gitconfig",
+}

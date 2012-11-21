@@ -1,0 +1,8 @@
+[alias]
+st = status
+br = branch
+ch = checkout
+co = commit
+fe = fetch
+plog = log --pretty=oneline
+
