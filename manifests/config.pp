@@ -62,3 +62,17 @@ file { '/etc/default/motion':
     mode => 0640,
     source => "puppet:///modules/sudo/default-motion",
 }
+
+file { '/home/yorrick/.bashrc':
+    owner => 'yorrick',
+    group => 'yorrick',
+    mode => 0644,
+    source => "puppet:///modules/environment/.bashrc",
+}
+
+file { '/home/yorrick/.vimrc':
+    owner => 'yorrick',
+    group => 'yorrick',
+    mode => 0644,
+    source => "puppet:///modules/environment/.vimrc",
+}
