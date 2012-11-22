@@ -56,7 +56,7 @@ package { "python-virtualenv":
     ensure => "latest"
 }
 
-package { "uswgi":
+package { "uwsgi":
     ensure => "latest"
 }
 
