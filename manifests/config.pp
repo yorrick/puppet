@@ -56,6 +56,10 @@ package { "python-virtualenv":
     ensure => "latest"
 }
 
+package { "uswgi":
+    ensure => "latest"
+}
+
 file { '/etc/default/motion':
     owner => 'root',
     group => 'root',
