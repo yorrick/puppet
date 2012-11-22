@@ -35,7 +35,7 @@ define puppet::foreman::config::puppetmaster($foreman_url = undef) {
     ensure  => file,
     owner   => root,
     group   => root,
-    mode    => '0644',
+    mode    => '0750',
     content => template("${module_name}/foreman/facts/push_facts_to_foreman.rb.erb")
   }
 
