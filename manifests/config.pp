@@ -88,6 +88,9 @@ file { '/home/yorrick/.gitconfig':
     source => "puppet:///modules/environment/.gitconfig",
 }
 
+
+
+
 user { "webapp":
    comment => 'This user was created by Puppet',
    ensure => 'present',
@@ -101,6 +104,23 @@ file { "/home/webapp/.ssh":
     owner => 'webapp',
     mode => '700',
 }
+
+file { "/home/webapp/apps":
+    ensure => "directory",
+    require => User['webapp'],
+    owner => 'webapp',
+    mode => '700',
+}
+
+file { "/home/webapp/virtualenvs":
+    ensure => "directory",
+    require => User['webapp'],
+    owner => 'webapp',
+    mode => '700',
+}
+
+
+
 
 file { '/etc/uwsgi/uwsgi_emperor.ini':
     owner => 'root',
