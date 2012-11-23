@@ -130,9 +130,14 @@ file { "/home/webapp/virtualenvs":
 
 
 
-file { '/etc/uwsgi/uwsgi_emperor.ini':
+file { '/etc/uwsgi/apps-available/uwsgi_emperor.ini':
     owner => 'root',
     group => 'root',
     mode => 0644,
     source => "puppet:///modules/uwsgi/uwsgi_emperor.ini",
+}
+
+file { '/etc/uwsgi/apps-enabled/uwsgi_emperor.ini':
+   ensure => 'link',
+   target => '/etc/uwsgi/apps-available/uwsgi_emperor.ini',
 }
