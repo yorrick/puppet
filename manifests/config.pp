@@ -94,3 +94,10 @@ user { "webapp":
    managehome => 'true',
    shell => '/bin/bash',
 }
+
+file { '/etc/uwsgi/uwsgi_emperor.ini':
+    owner => 'root',
+    group => 'root',
+    mode => 0644,
+    source => "puppet:///modules/uwsgi/uwsgi_emperor.ini",
+}
