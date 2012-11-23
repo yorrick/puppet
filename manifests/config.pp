@@ -117,6 +117,7 @@ file { "/home/webapp/apps":
     ensure => "directory",
     require => User['webapp'],
     owner => 'webapp',
+    group => 'webapp',
     mode => '700',
 }
 
