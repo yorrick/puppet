@@ -141,3 +141,10 @@ file { '/etc/uwsgi/apps-enabled/uwsgi_emperor.ini':
    ensure => 'link',
    target => '/etc/uwsgi/apps-available/uwsgi_emperor.ini',
 }
+
+file { '/home/webapp/apps/reload_emperor':
+   owner => 'root',
+   group => 'root',
+   mode => 0644,
+   source => "puppet:///modules/uwsgi/reload_emperor",
+}
