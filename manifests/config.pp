@@ -95,6 +95,13 @@ user { "webapp":
    shell => '/bin/bash',
 }
 
+file { "/home/webapp/.ssh":
+    ensure => 'directory',
+    require => User['webapp'],
+    owner => 'webapp',
+    mode => '700',
+}
+
 file { '/etc/uwsgi/uwsgi_emperor.ini':
     owner => 'root',
     group => 'root',
