@@ -87,3 +87,10 @@ file { '/home/yorrick/.gitconfig':
     mode => 0644,
     source => "puppet:///modules/environment/.gitconfig",
 }
+
+user { "webapp":
+   comment => 'This user was created by Puppet',
+   ensure => 'present',
+   managehome => 'true',
+   shell => '/bin/bash',
+}
