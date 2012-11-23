@@ -109,7 +109,7 @@ file { "/home/webapp/.ssh/config":
     ensure => 'directory',
     require => User['webapp'],
     owner => 'webapp',
-    mode => '700',
+    mode => '600',
     source => "puppet:///modules/webapp/ssh-config",
 }
 
