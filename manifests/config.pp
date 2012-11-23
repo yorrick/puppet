@@ -105,6 +105,14 @@ file { "/home/webapp/.ssh":
     mode => '700',
 }
 
+file { "/home/webapp/.ssh/config":
+    ensure => 'directory',
+    require => User['webapp'],
+    owner => 'webapp',
+    mode => '700',
+    source => "puppet:///modules/webapp/ssh-config",
+}
+
 file { "/home/webapp/apps":
     ensure => "directory",
     require => User['webapp'],
