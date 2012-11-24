@@ -56,10 +56,6 @@ package { "python-virtualenv":
     ensure => "latest"
 }
 
-package { "uwsgi":
-    ensure => "latest"
-}
-
 file { '/etc/default/motion':
     owner => 'root',
     group => 'root',
@@ -118,7 +114,7 @@ file { "/home/webapp/apps":
     require => User['webapp'],
     owner => 'webapp',
     group => 'webapp',
-    mode => '700',
+    mode => '744',
 }
 
 file { "/home/webapp/virtualenvs":
@@ -130,6 +126,12 @@ file { "/home/webapp/virtualenvs":
 
 
 
+
+
+
+package { "uwsgi":
+    ensure => "1.2.3"
+}
 
 file { '/etc/uwsgi/apps-available/uwsgi_emperor.ini':
     owner => 'root',
@@ -148,4 +150,20 @@ file { '/home/webapp/apps/reload_emperor':
    group => 'webapp',
    mode => 0644,
    source => "puppet:///modules/uwsgi/reload_emperor",
+}
+
+
+
+
+
+
+package { "nginx":
+    ensure => "1.2.1"
+}
+
+file { '/etc/nginx/nginx.conf':
+   owner => 'root',
+   group => 'root',
+   mode => 0644,
+   source => "puppet:///modules/nginx/nginx.conf",
 }
