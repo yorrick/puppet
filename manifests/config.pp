@@ -133,6 +133,10 @@ package { "uwsgi":
     ensure => "1.2.3+dfsg-5"
 }
 
+package { "uwsgi-plugin-python":
+    ensure => "1.2.3+dfsg-5"
+}
+
 file { '/etc/uwsgi/apps-available/uwsgi_emperor.ini':
     owner => 'root',
     group => 'root',
