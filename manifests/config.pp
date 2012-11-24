@@ -130,7 +130,7 @@ file { "/home/webapp/virtualenvs":
 
 
 package { "uwsgi":
-    ensure => "1.2.3"
+    ensure => "1.2.3+dfsg-5"
 }
 
 file { '/etc/uwsgi/apps-available/uwsgi_emperor.ini':
@@ -158,7 +158,7 @@ file { '/home/webapp/apps/reload_emperor':
 
 
 package { "nginx":
-    ensure => "1.2.1"
+    ensure => "1.2.1-2.2"
 }
 
 file { '/etc/nginx/nginx.conf':
