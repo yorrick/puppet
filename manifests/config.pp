@@ -52,15 +52,22 @@ package { "motion":
     ensure => "latest"
 }
 
-package { "python-virtualenv":
-    ensure => "latest"
-}
-
 file { '/etc/default/motion':
     owner => 'root',
     group => 'root',
     mode => 0640,
-    source => "puppet:///modules/sudo/default-motion",
+    source => "puppet:///modules/motion/default-motion",
+}
+
+file { '/etc/motion/motion.conf':
+    owner => 'root',
+    group => 'root',
+    mode => 0640,
+    source => "puppet:///modules/motion/motion.conf",
+}
+
+package { "python-virtualenv":
+    ensure => "latest"
 }
 
 file { '/home/yorrick/.bashrc':
