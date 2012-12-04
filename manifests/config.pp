@@ -178,3 +178,11 @@ file { '/etc/nginx/nginx.conf':
    mode => 0644,
    source => "puppet:///modules/nginx/nginx.conf",
 }
+
+
+
+
+
+package { "libzmq-dev":
+    ensure => "2.2.0+dfsg-2"
+}
