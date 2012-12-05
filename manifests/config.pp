@@ -182,7 +182,10 @@ file { '/etc/nginx/nginx.conf':
 
 
 
-
 package { "libzmq-dev":
-    ensure => "2.2.0+dfsg-2"
+    ensure => "2.2.0+dfsg-2",
+}
+
+package { "python2.7-dev":
+    ensure => "2.7.3~rc2-2.1",
 }
