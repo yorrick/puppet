@@ -60,8 +60,8 @@ file { '/etc/default/motion':
 }
 
 file { '/etc/motion/motion.conf':
-    owner => 'root',
-    group => 'root',
+    owner => 'motion',
+    group => 'motion',
     mode => 0640,
     source => "puppet:///modules/motion/motion.conf",
 }
