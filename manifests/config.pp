@@ -48,6 +48,10 @@ package { "htop":
     ensure => "latest"
 }
 
+
+
+
+
 package { "motion":
     ensure => "latest"
 }
@@ -65,6 +69,16 @@ file { '/etc/motion/motion.conf':
     mode => 0640,
     source => "puppet:///modules/motion/motion.conf",
 }
+
+file { '/etc/motion/on_movie_end.sh':
+    owner => 'motion',
+    group => 'motion',
+    mode => 0640,
+    source => "puppet:///modules/motion/motion.conf",
+}
+
+
+
 
 package { "python-virtualenv":
     ensure => "latest"
@@ -188,4 +202,20 @@ package { "libzmq-dev":
 
 package { "python2.7-dev":
     ensure => "2.7.3~rc2-2.1",
+}
+
+service { "ztaskd":
+    ensure => "running",
+    enable => "true",
+    require => Package["libzmq-dev"],
+}
+
+file {'/etc/init.d/ztaskd':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => 600,
+    source  => "puppet:///modules/ztaskd/ztask_server.sh",
+    require => Package["libzmq-dev"],
+    notify  => Service["ztaskd"],
 }
