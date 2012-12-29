@@ -70,13 +70,6 @@ file { '/etc/motion/motion.conf':
     source => "puppet:///modules/motion/motion.conf",
 }
 
-file { '/etc/motion/on_movie_end.sh':
-    owner => 'motion',
-    group => 'motion',
-    mode => 0640,
-    source => "puppet:///modules/motion/motion.conf",
-}
-
 
 
 
