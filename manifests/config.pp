@@ -200,7 +200,8 @@ package { "python2.7-dev":
 service { "ztaskd":
     ensure => "running",
     enable => "true",
-    require => Package["libzmq-dev"], File["/var/run/ztask"], File["/var/log/ztask"], File["/etc/init.d/ztaskd"],
+    require => Package["libzmq-dev"],
+    require => File["/var/run/ztask", "/var/log/ztask", "/etc/init.d/ztaskd"],
 }
 
 file {'/etc/init.d/ztaskd':
