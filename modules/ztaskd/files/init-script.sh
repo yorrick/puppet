@@ -1,91 +1,126 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:          ztaskd
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop ztaskd server instance(s)
+# Description:       This script manages ztaskd server instance(s).
+### END INIT INFO
 
-# you need to create the directories for PIDFILE and LOGFILE and give them the necessary permissions
-PIDFILE_DIR="/var/run/ztask"
-[ -d "$PIDFILE_DIR" ] || { echo "no such directory: '$PIDFILE_DIR'"; exit 1; }
-PIDFILE="$PIDFILE_DIR/ztask.pid"
-LOGFILE_DIR="/var/log/ztask"
-[ -d "$LOGFILE_DIR" ] || { echo "no such directory: '$LOGFILE_DIR'"; exit 1; }
-LOGFILE="$LOGFILE_DIR/ztask.log"
-LOCKDIR="$PIDFILE_DIR/ztaskd.lock"
-WORKDIR=`dirname "$0"`
-cd "$WORKDIR"
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="ztaskd"
+NAME="ztaskd"
+VIRTUALENV="/home/webapp/virtualenvs/home_automation/bin/activate"
+DJANGO_MANAGE="/home/webapp/apps/home_automation/manage.py"
+# DAEMON="source ~/virtualenvs/home_automation/bin/activate && ~/apps/home_automation/manage.py  --logfile "$LOGFILE" --noreload --daemonize"
+SCRIPTNAME="/etc/init.d/${NAME}"
+PIDFILE=/var/run/$NAME.pid
+UMASK=022
+ZTASKD_USER="WEBAPP"
 
-get_lock() {
- # usage:
- # get_lock lockdir
- # function adapted from http://wiki.bash-hackers.org/howto/mutex
+# Exit if the virtualenv is not installed
+[ -x "VIRTUALENV" ] || exit 0
+# Exit if the virtualenv is not installed
+[ -x "DJANGO_MANAGE" ] || exit 0
 
- lockdir="$1"
- pidfile="$lockdir/get_lock.pid"
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
 
- # exit codes and text for them - additional features nobody needs :-)
- ENO_SUCCESS=0; ETXT[0]="ENO_SUCCESS"
- ENO_GENERAL=1; ETXT[1]="ENO_GENERAL"
- ENO_LOCKFAIL=2; ETXT[2]="ENO_LOCKFAIL"
- ENO_RECVSIG=3; ETXT[3]="ENO_RECVSIG"
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
 
- if mkdir "${lockdir}" &>/dev/null; then
-  echo "$$" >"${pidfile}"
-  # the following handler will exit the script on receiving these signals
-  trap 'echo "[get_lock] Killed by a signal." >&2
-  exit ${ENO_RECVSIG}' 1 2 3 15
- else
-  # lock failed, now check if the other PID is alive
-  OTHERPID="$(cat "${pidfile}")"
-  # if cat wasn't able to read the file anymore, another instance probably is
-  # about to remove the lock -- exit, we're *still* locked
-  #  Thanks to Grzegorz Wierzowiecki for pointing this race condition out on
-  #  http://wiki.grzegorz.wierzowiecki.pl/code:mutex-in-bash
-  if [ $? != 0 ]; then
-   echo "lock failed, PID ${OTHERPID} is active" >&2
-   exit ${ENO_LOCKFAIL}
-  fi
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+   # Return
+   #   0 if daemon has been started
+   #   1 if daemon was already running
+   #   2 if daemon could not be started
+   start-stop-daemon --start --background --quiet --pidfile $PIDFILE1 --exec $DAEMON1 \
+      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK --test > /dev/null
+   RETVAL1="$?"
+   start-stop-daemon --start --background --quiet --pidfile $PIDFILE2 --exec $DAEMON2 \
+      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK --test > /dev/null
+   RETVAL2="$?"
+   [ "$RETVAL1" = "0" -a "$RETVAL2" = "0" ] || return 1
 
-  if ! kill -0 $OTHERPID &>/dev/null; then
-   # lock is stale, remove it and restart
-   echo "removing stale lock of nonexistant PID ${OTHERPID}" >&2
-   rm -rf "${lockdir}"
-   # restart the locking
-   get_lock "${lockdir}"
-  else
-   # lock is valid and OTHERPID is active - exit, we're locked!
-   echo "lock failed, PID ${OTHERPID} is active" >&2
-   exit ${ENO_LOCKFAIL}
-  fi
- fi
+   start-stop-daemon --start --background --quiet --pidfile $PIDFILE1 --make-pidfile --exec $DAEMON1 \
+      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK -- $DAEMON1_ARGS
+   RETVAL1="$?"
+        sleep 2
+   start-stop-daemon --start --background --quiet --pidfile $PIDFILE2 --make-pidfile --exec $DAEMON2 \
+      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK -- $DAEMON2_ARGS
+   RETVAL2="$?"
+   [ "$RETVAL1" = "0" -a "$RETVAL2" = "0" ] || return 2
 }
 
-cp_start()
+#
+# Function that stops the daemon/service
+#
+do_stop()
 {
- ./manage.py ztaskd --logfile "$LOGFILE" --pidfile "$PIDFILE" --noreload --daemonize
-}
+   # Return
+   #   0 if daemon has been stopped
+   #   1 if daemon was already stopped
+   #   2 if daemon could not be stopped
+   #   other if a failure occurred
 
-cp_stop()
-{
- ./manage.py ztaskd --pidfile "$PIDFILE" --stop
-}
+   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $DELUGED_USER --pidfile $PIDFILE2
+   RETVAL2="$?"
+   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $DELUGED_USER --pidfile $PIDFILE1
+   RETVAL1="$?"
+   [ "$RETVAL1" = "2" -o "$RETVAL2" = "2" ] && return 2
 
-cp_restart()
-{
- get_lock "${LOCKDIR}"
- cp_stop >/dev/null
- cp_start
- rm -rf "${LOCKDIR}"
+   rm -f $PIDFILE1 $PIDFILE2
+
+   [ "$RETVAL1" = "0" -a "$RETVAL2" = "0" ] && return 0 || return 1
 }
 
 case "$1" in
- "start")
-  cp_start
- ;;
- "stop")
-  cp_stop
- ;;
- "restart")
-  cp_restart
- ;;
- *)
-  "$@"
- ;;
+  start)
+   [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME1"
+   do_start
+   case "$?" in
+      0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+      2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+   esac
+   ;;
+  stop)
+   [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME1"
+   do_stop
+   case "$?" in
+      0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+      2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+   esac
+   ;;
+  restart|force-reload)
+   log_daemon_msg "Restarting $DESC" "$NAME1"
+   do_stop
+   case "$?" in
+     0|1)
+      do_start
+      case "$?" in
+         0) log_end_msg 0 ;;
+         1) log_end_msg 1 ;; # Old process is still running
+         *) log_end_msg 1 ;; # Failed to start
+      esac
+      ;;
+     *)
+        # Failed to stop
+      log_end_msg 1
+      ;;
+   esac
+   ;;
+  *)
+   echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+   exit 3
+   ;;
 esac
 
+:
