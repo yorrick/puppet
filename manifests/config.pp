@@ -200,7 +200,7 @@ package { "python2.7-dev":
 service { "ztaskd":
     ensure => "running",
     enable => "true",
-    require => Package["libzmq-dev"],
+    require => Package["libzmq-dev"], File["/var/run/ztask"], File["/var/log/ztask"], File["/etc/init.d/ztaskd"],
 }
 
 file {'/etc/init.d/ztaskd':
@@ -208,7 +208,18 @@ file {'/etc/init.d/ztaskd':
     owner   => root,
     group   => root,
     mode    => 600,
-    source  => "puppet:///modules/ztaskd/ztask_server.sh",
+    source  => "puppet:///modules/ztaskd/init-script.sh",
     require => Package["libzmq-dev"],
-    notify  => Service["ztaskd"],
+#    notify  => Service["ztaskd"],
 }
+
+file { "/var/run/ztask":
+    ensure => 'directory',
+    mode => '755',
+}
+
+file { "/var/log/ztask":
+    ensure => 'directory',
+    mode => '755',
+}
+
