@@ -15,6 +15,10 @@ DESC="ztaskd"
 NAME="ztaskd"
 VIRTUALENV="/home/webapp/virtualenvs/home_automation/bin/activate"
 DJANGO_MANAGE="/home/webapp/apps/home_automation/manage.py"
+LOGFILE_DIR="/var/log/ztask"
+[ -d "$LOGFILE_DIR" ] || { echo "no such directory: '$LOGFILE_DIR'"; exit 1; }
+LOGFILE="$LOGFILE_DIR/ztask.log"
+DAEMON="source $VIRTUALENV && $DJANGO_MANAGE --logfile \"$LOGFILE\" --noreload"
 # DAEMON="source ~/virtualenvs/home_automation/bin/activate && ~/apps/home_automation/manage.py  --logfile "$LOGFILE" --noreload --daemonize"
 SCRIPTNAME="/etc/init.d/${NAME}"
 PIDFILE=/var/run/$NAME.pid
@@ -42,20 +46,17 @@ do_start()
    #   0 if daemon has been started
    #   1 if daemon was already running
    #   2 if daemon could not be started
-   start-stop-daemon --start --background --quiet --pidfile $PIDFILE1 --exec $DAEMON1 \
-      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK --test > /dev/null
-   RETVAL1="$?"
-   start-stop-daemon --start --background --quiet --pidfile $PIDFILE2 --exec $DAEMON2 \
-      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK --test > /dev/null
-   RETVAL2="$?"
-   [ "$RETVAL1" = "0" -a "$RETVAL2" = "0" ] || return 1
+   start-stop-daemon --start --background --quiet --pidfile $PIDFILE --exec $DAEMON1 \
+      --chuid $DELUGED_USER --user $ZTASKD_USER --umask $UMASK --test > /dev/null
+   RETVAL="$?"
+   [ "$RETVAL" = "0" ] || return 1
 
    start-stop-daemon --start --background --quiet --pidfile $PIDFILE1 --make-pidfile --exec $DAEMON1 \
-      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK -- $DAEMON1_ARGS
+      --chuid $DELUGED_USER --user $ZTASKD_USER --umask $UMASK -- $DAEMON1_ARGS
    RETVAL1="$?"
         sleep 2
    start-stop-daemon --start --background --quiet --pidfile $PIDFILE2 --make-pidfile --exec $DAEMON2 \
-      --chuid $DELUGED_USER --user $DELUGED_USER --umask $UMASK -- $DAEMON2_ARGS
+      --chuid $DELUGED_USER --user $ZTASKD_USER --umask $UMASK -- $DAEMON2_ARGS
    RETVAL2="$?"
    [ "$RETVAL1" = "0" -a "$RETVAL2" = "0" ] || return 2
 }
@@ -71,9 +72,9 @@ do_stop()
    #   2 if daemon could not be stopped
    #   other if a failure occurred
 
-   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $DELUGED_USER --pidfile $PIDFILE2
+   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $ZTASKD_USER --pidfile $PIDFILE2
    RETVAL2="$?"
-   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $DELUGED_USER --pidfile $PIDFILE1
+   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $ZTASKD_USER --pidfile $PIDFILE1
    RETVAL1="$?"
    [ "$RETVAL1" = "2" -o "$RETVAL2" = "2" ] && return 2
 
