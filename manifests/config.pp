@@ -207,7 +207,7 @@ file {'/etc/init.d/ztaskd':
     ensure  => present,
     owner   => root,
     group   => root,
-    mode    => 600,
+    mode    => 755,
     source  => "puppet:///modules/ztaskd/init-script.sh",
     require => Package["libzmq-dev"],
 #    notify  => Service["ztaskd"],
