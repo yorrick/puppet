@@ -32,11 +32,6 @@ class ztaskd::server () {
         notify  => Service["ztaskd"],
     }
 
-    file { "/var/run/ztask":
-        ensure => 'directory',
-        mode => '755',
-    }
-
     file { "/var/log/ztask":
         ensure => 'directory',
         mode => '755',
