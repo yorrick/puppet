@@ -18,7 +18,7 @@ DJANGO_MANAGE="/home/webapp/apps/home_automation/manage.py"
 LOGFILE_DIR="/var/log/ztask"
 [ -d "$LOGFILE_DIR" ] || { echo "no such directory: '$LOGFILE_DIR'"; exit 1; }
 LOGFILE="$LOGFILE_DIR/ztask.log"
-DAEMON="source $VIRTUALENV && $DJANGO_MANAGE"
+DAEMON="/usr/local/bin/ztaskd"
 DAEMON_ARGS=" --logfile \"$LOGFILE\" --noreload"
 SCRIPTNAME="/etc/init.d/${NAME}"
 PIDFILE=/var/run/$NAME.pid
