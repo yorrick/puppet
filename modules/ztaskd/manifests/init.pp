@@ -22,6 +22,7 @@ class ztaskd::server () {
         source  => "puppet:///modules/ztaskd/ztaskd.sh",
     }
 
+    # TODO add dep on lsb-base (>= 3.0-6)
     file {'/etc/init.d/ztaskd':
         ensure  => present,
         owner   => root,
