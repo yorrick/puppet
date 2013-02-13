@@ -14,6 +14,14 @@ class ztaskd::server () {
         require => [Package["libzmq-dev"], File["/var/run/ztask"], File["/var/log/ztask"], File["/etc/init.d/ztaskd"]],
     }
 
+    file {'/usr/local/bin/ztaskd':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => 755,
+        source  => "puppet:///modules/ztaskd/ztaskd.sh",
+    }
+
     file {'/etc/init.d/ztaskd':
         ensure  => present,
         owner   => root,
@@ -21,7 +29,7 @@ class ztaskd::server () {
         mode    => 755,
         source  => "puppet:///modules/ztaskd/init-script.sh",
         require => Package["libzmq-dev"],
-    #    notify  => Service["ztaskd"],
+        notify  => Service["ztaskd"],
     }
 
     file { "/var/run/ztask":
@@ -33,6 +41,8 @@ class ztaskd::server () {
         ensure => 'directory',
         mode => '755',
     }
+
+    # TODO add dependency to virtualenv and home-automation application
 
 }
 

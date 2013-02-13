@@ -51,6 +51,11 @@ do_start()
       --chuid $ZTASKD_USER --user $ZTASKD_USER --umask $UMASK --test > /dev/null
    RETVAL="$?"
    [ "$RETVAL" = "0" ] || return 1
+
+   start-stop-daemon --start --background --quiet --pidfile $PIDFILE --make-pidfile --exec "$DAEMON" \
+      --chuid $ZTASKD_USER --user $ZTASKD_USER --umask $UMASK -- "$DAEMON_ARGS"
+   RETVAL="$?"
+   [ "$RETVAL" = "0" ] || return 2
 }
 
 #
