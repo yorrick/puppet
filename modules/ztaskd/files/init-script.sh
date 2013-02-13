@@ -56,7 +56,7 @@ do_start()
    RETVAL="$?"
    [ "$RETVAL" = "0" ] || return 2
 
-   echo "Started ztaskd deamon, pid $!"
+   echo "Started ztaskd deamon"
 }
 
 #
@@ -77,6 +77,8 @@ do_stop()
    rm -f $PIDFILE
 
    [ "$RETVAL" = "0" ] && return 0 || return 1
+
+   echo "Stopped ztaskd deamon"
 }
 
 case "$1" in
