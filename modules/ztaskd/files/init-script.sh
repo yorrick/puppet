@@ -55,6 +55,7 @@ do_start()
            echo "Started ztaskd deamon"; return 0;
        ;;
        "1")
+           # TODO fixme, "1" is never returned
            echo "Already started"; return 1;
        ;;
        "2")
@@ -76,7 +77,11 @@ do_stop()
 
    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $ZTASKD_USER --pidfile $PIDFILE
    RETVAL="$?"
-   [ "$RETVAL" = "2" ] && return 2
+   if [ "$RETVAL" = "2" ]
+   then
+       echo "Could not stop deamon"
+       return 2
+   fi
 
    rm -f $PIDFILE
    RETVAL="$?"
