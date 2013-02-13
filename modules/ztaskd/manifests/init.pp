@@ -35,7 +35,7 @@ class ztaskd::server () {
 
     file { "/var/log/ztask":
         ensure => 'directory',
-        mode => '755',
+        mode => '777',
     }
 
     # TODO add dependency to virtualenv and home-automation application
