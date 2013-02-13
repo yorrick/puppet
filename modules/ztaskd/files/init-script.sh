@@ -47,13 +47,16 @@ do_start()
    #   1 if daemon was already running
    #   2 if daemon could not be started
 
-   [ -e "$PIDFILE" ] && (echo "Ztaskd was already started"; return 1;)
-
    start-stop-daemon --start --background --quiet --pidfile $PIDFILE --make-pidfile --exec "$DAEMON" \
       --chuid $ZTASKD_USER --user $ZTASKD_USER --umask $UMASK -- "$DAEMON_ARGS"
-   RETVAL="$?"
 
-   [ "$RETVAL" = "0" ] && (echo "Started ztaskd deamon"; return 0;) || (echo "Could not start ztaskd deamon"; return 2;)
+   case "$?" in
+       "0")
+           echo "Started ztaskd deamon"; return 0;
+       "1")
+           echo "Already started"; return 1;
+       "2")
+           echo "Could not start ztaskd deamon"; return 2;
 }
 
 #
