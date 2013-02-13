@@ -76,16 +76,20 @@ do_stop()
    #   other if a failure occurred
 
    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $ZTASKD_USER --pidfile $PIDFILE
-   RETVAL="$?"
-   if [ "$RETVAL" = "2" ]
-   then
-       echo "Could not stop deamon"
-       return 2
-   fi
 
-   rm -f $PIDFILE
-   RETVAL="$?"
-   [ "$RETVAL" = "0" ] && (echo "Stopped ztaskd deamon"; return 0;) || (echo "Ztaskd deamon was already stopped"; return 1;)
+   case "$?" in
+      "0")
+          rm -f $PIDFILE
+          echo "Stopped ztaskd deamon"
+          return 0
+      ;;
+      "1")
+          echo "Already stopped"; return 1;
+      ;;
+      "2")
+          echo "Could not stop ztaskd deamon"; return 2;
+      ;;
+   esac
 }
 
 case "$1" in
