@@ -50,8 +50,8 @@ do_start()
    start-stop-daemon --start --background --quiet --pidfile $PIDFILE --make-pidfile --exec "$DAEMON" \
       --chuid $ZTASKD_USER --user $ZTASKD_USER --umask $UMASK -- "$DAEMON_ARGS"
    RETVAL="$?"
-   [ "$RETVAL" = "1" ] && {echo "Ztaskd was already started"; return 1;}
-   [ "$RETVAL" = "0" ] && {echo "Started ztaskd deamon"; return 0;} || {echo "Could not start ztaskd deamon"; return 2;}
+   [ "$RETVAL" = "1" ] && (echo "Ztaskd was already started"; return 1;)
+   [ "$RETVAL" = "0" ] && (echo "Started ztaskd deamon"; return 0;) || (echo "Could not start ztaskd deamon"; return 2;)
 }
 
 #
