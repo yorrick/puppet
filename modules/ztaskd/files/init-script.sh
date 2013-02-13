@@ -53,10 +53,14 @@ do_start()
    case "$?" in
        "0")
            echo "Started ztaskd deamon"; return 0;
+       ;;
        "1")
            echo "Already started"; return 1;
+       ;;
        "2")
            echo "Could not start ztaskd deamon"; return 2;
+       ;;
+   esac
 }
 
 #
