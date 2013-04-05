@@ -2,10 +2,10 @@
 
 require 'spec_helper'
 
-describe 'puppet::agent::setting' do
+describe "puppet::agent::setting" do
   let (:title) { 'pluginsync' }
 
-  context 'with ensure => installed' do
+  context "with ensure => 'installed'" do
     let (:params) { { :ensure => 'installed' } }
 
     it { expect { subject }.to raise_error(
@@ -13,7 +13,7 @@ describe 'puppet::agent::setting' do
     )}
   end
 
-  context 'with ensure => absent' do
+  context "with ensure => 'absent'" do
     let (:params) { { :ensure => 'absent' } }
 
     it do
@@ -26,7 +26,7 @@ describe 'puppet::agent::setting' do
       })
     end
 
-    context 'and value => true' do
+    context "and value => true" do
       let (:params) { { :ensure => 'absent', :value => 'true' } }
 
       it do
@@ -41,15 +41,23 @@ describe 'puppet::agent::setting' do
     end
   end
 
-  context 'without required parameters' do
+  context "without required parameters" do
     let (:params) { {} }
 
     it { expect { subject }.to raise_error(
-      Puppet::Error, /required parameter value not specified/
+      Puppet::Error, /required parameter value must be a string/
     )}
   end
 
-  context 'with value => false' do
+  context "with value => false" do
+    let (:params) { { :value => false } }
+
+    it { expect { subject }.to raise_error(
+      Puppet::Error, /required parameter value must be a string/
+    )}
+  end
+
+  context "with value => 'false'" do
     let (:params) { { :value => 'false' } }
 
     it do
@@ -58,11 +66,11 @@ describe 'puppet::agent::setting' do
         :lens    => 'Puppet.lns',
         :context => '/files/etc/puppet/puppet.conf/agent',
         :changes => 'set pluginsync false',
-        :onlyif  => 'match pluginsync false size == 0',
+        :onlyif  => 'match pluginsync[. = false] size == 0',
       })
     end
 
-    context 'and ensure => present' do
+    context "and ensure => 'present'" do
       let (:params) { { :ensure => 'present', :value => 'false' } }
 
       it do
@@ -71,7 +79,7 @@ describe 'puppet::agent::setting' do
           :lens    => 'Puppet.lns',
           :context => '/files/etc/puppet/puppet.conf/agent',
           :changes => 'set pluginsync false',
-          :onlyif  => 'match pluginsync false size == 0',
+          :onlyif  => 'match pluginsync[. = false] size == 0',
         })
       end
     end
