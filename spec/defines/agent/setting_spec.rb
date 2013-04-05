@@ -45,7 +45,15 @@ describe "puppet::agent::setting" do
     let (:params) { {} }
 
     it { expect { subject }.to raise_error(
-      Puppet::Error, /required parameter value must be a string/
+      Puppet::Error, /required parameter value must be a non-empty string/
+    )}
+  end
+
+  context "with value => ''" do
+    let (:params) { { :value => '' } }
+
+    it { expect { subject }.to raise_error(
+      Puppet::Error, /required parameter value must be a non-empty string/
     )}
   end
 
@@ -53,7 +61,7 @@ describe "puppet::agent::setting" do
     let (:params) { { :value => false } }
 
     it { expect { subject }.to raise_error(
-      Puppet::Error, /required parameter value must be a string/
+      Puppet::Error, /required parameter value must be a non-empty string/
     )}
   end
 
