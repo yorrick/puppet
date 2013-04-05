@@ -16,7 +16,7 @@ define puppet::agent::setting( $ensure = 'present', $value = undef ) {
     }
     'present': {
       if ! $value {
-        fail("Puppet::Agent::Setting[${title}]: required parameter value not specified")
+        fail("Puppet::Agent::Setting[${title}]: required parameter value must be a string")
       }
       else {
         augeas { "puppet::agent::${title}":
