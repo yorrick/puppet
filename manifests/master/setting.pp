@@ -21,7 +21,7 @@ define puppet::master::setting( $ensure = 'present', $value = undef ) {
       else {
         augeas { "puppet::master::${title}":
           onlyif  => "match ${title}[. = ${value}] size == 0",
-          changes => "set ${title} ${value}",
+          changes => "set ${title} '${value}'",
         }
       }
     }
