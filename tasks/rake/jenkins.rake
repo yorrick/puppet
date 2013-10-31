@@ -10,7 +10,7 @@ namespace "jenkins" do
   rescue LoadError
     fail 'Cannot load ci_reporter, did you install it?'
   end
-  
+
   SPEC_REPORTS_PATH = "#{RESULTS}/reports/spec/"
   ACCEPTANCE_REPORTS_PATH = "#{RESULTS}/reports/acceptance/"
 
@@ -18,7 +18,7 @@ namespace "jenkins" do
   task :spec_tests => ["ci:setup:rspec"] do
     ENV['CI_REPORTS'] = SPEC_REPORTS_PATH
     FileUtils.mkdir_p(SPEC_REPORTS_PATH)
-    
+
     Rake::Task[:spec].invoke
   end
 
@@ -26,7 +26,7 @@ namespace "jenkins" do
   task :acceptance_tests => ["ci:setup:cucumber"] do
     ENV['CI_REPORTS'] = ACCEPTANCE_REPORTS_PATH
     FileUtils.mkdir_p(ACCEPTANCE_REPORTS_PATH)
-    
+
     Rake::Task[:acceptance].invoke
   end
 
@@ -37,7 +37,8 @@ namespace "jenkins" do
     module_name = ENV['JOB_NAME']
     git_commit = ENV['GIT_COMMIT']
 		semver_version = VersionHelper.new.semver_version
-    
+    rpm_name = "cegeka-#{module_name}-#{semver_version}-1.noarch.rpm"
+
     if !git_commit.nil? and !git_commit.empty?
       puts "Saving #{module_name}.yaml file"
       FileUtils.mkdir_p(dist_dir)
@@ -45,6 +46,7 @@ namespace "jenkins" do
         file.puts "module_name: #{module_name}"
         file.puts "git_commit: #{git_commit}"
 				file.puts "semver_version: #{semver_version}"
+				file.puts "rpm_name: #{rpm_name}"
       }
     end
   end
