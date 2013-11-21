@@ -20,8 +20,8 @@ define puppet::main::setting( $ensure = 'present', $value = undef ) {
       }
       else {
         augeas { "puppet::main::${title}":
-          onlyif  => "match ${title}[. = ${value}] size == 0",
-          changes => "set ${title} ${value}",
+          onlyif  => "match ${title}[. = '${value}'] size == 0",
+          changes => "set ${title} '${value}'",
         }
       }
     }
