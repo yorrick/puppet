@@ -73,8 +73,8 @@ describe "puppet::main::setting" do
         :incl    => '/etc/puppet/puppet.conf',
         :lens    => 'Puppet.lns',
         :context => '/files/etc/puppet/puppet.conf/main',
-        :changes => 'set configtimeout 300',
-        :onlyif  => 'match configtimeout[. = 300] size == 0',
+        :changes => "set configtimeout '300'",
+        :onlyif  => "match configtimeout[. = '300'] size == 0",
       })
     end
 
@@ -86,8 +86,8 @@ describe "puppet::main::setting" do
           :incl    => '/etc/puppet/puppet.conf',
           :lens    => 'Puppet.lns',
           :context => '/files/etc/puppet/puppet.conf/main',
-          :changes => 'set configtimeout 300',
-          :onlyif  => 'match configtimeout[. = 300] size == 0',
+          :changes => "set configtimeout '300'",
+          :onlyif  => "match configtimeout[. = '300'] size == 0",
         })
       end
     end
