@@ -74,7 +74,7 @@ describe "puppet::master::setting" do
         :lens    => 'Puppet.lns',
         :context => '/files/etc/puppet/puppet.conf/master',
         :changes => "set reports 'tagmail'",
-        :onlyif  => 'match reports[. = tagmail] size == 0',
+        :onlyif  => "match reports[. = 'tagmail'] size == 0",
       })
     end
 
@@ -87,7 +87,7 @@ describe "puppet::master::setting" do
           :lens    => 'Puppet.lns',
           :context => '/files/etc/puppet/puppet.conf/master',
           :changes => "set reports 'tagmail'",
-          :onlyif  => 'match reports[. = tagmail] size == 0',
+          :onlyif  => "match reports[. = 'tagmail'] size == 0",
         })
       end
     end
