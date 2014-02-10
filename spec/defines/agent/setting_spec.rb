@@ -74,7 +74,7 @@ describe "puppet::agent::setting" do
         :lens    => 'Puppet.lns',
         :context => '/files/etc/puppet/puppet.conf/agent',
         :changes => 'set pluginsync false',
-        :onlyif  => 'match pluginsync[. = false] size == 0',
+        :onlyif  => "match pluginsync[. = 'false'] size == 0",
       })
     end
 
@@ -87,7 +87,7 @@ describe "puppet::agent::setting" do
           :lens    => 'Puppet.lns',
           :context => '/files/etc/puppet/puppet.conf/agent',
           :changes => 'set pluginsync false',
-          :onlyif  => 'match pluginsync[. = false] size == 0',
+          :onlyif  => "match pluginsync[. = 'false'] size == 0",
         })
       end
     end
