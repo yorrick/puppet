@@ -20,7 +20,7 @@ define puppet::agent::setting( $ensure = 'present', $value = undef ) {
       }
       else {
         augeas { "puppet::agent::${title}":
-          onlyif  => "match ${title}[. = ${value}] size == 0",
+          onlyif  => "match ${title}[. = '${value}'] size == 0",
           changes => "set ${title} ${value}",
         }
       }
