@@ -13,7 +13,7 @@ sleep rand(10)
 puppetdir="/var/lib/puppet"
 
 # URL where Foreman lives
-url="<%= foreman_url %>"
+url="<%= @foreman_url %>"
 
 # Temp file keeping the last run time
 stat_file = "/tmp/foreman_fact_importer"
