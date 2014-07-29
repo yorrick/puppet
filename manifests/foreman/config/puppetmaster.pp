@@ -28,7 +28,7 @@ define puppet::foreman::config::puppetmaster($foreman_url = undef) {
   }
 
   cron { 'push_facts_to_foreman':
-    command => '/usr/local/scripts/push_facts_to_foreman.rb > /dev/null 2&>1',
+    command => '/usr/local/scripts/push_facts_to_foreman.rb',
     user    => root,
     hour    => 2,
     minute  => 0,
