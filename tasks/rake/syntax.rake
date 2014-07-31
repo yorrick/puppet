@@ -8,6 +8,8 @@ task :syntax do
     fail 'Cannot load puppet/face, are you sure you have Puppet 2.7?'
   end
 
+  Puppet.initialize_settings
+
   puts "Checking puppet module syntax..."
 
   success = true
@@ -15,7 +17,7 @@ task :syntax do
   FileList['**/*.pp'].each do |manifest|
     puts "Evaluating syntax for #{manifest}"
     begin
-      Puppet::Face[:parser, '0.0.1'].validate(manifest) 
+      Puppet::Face[:parser, '0.0.1'].validate(manifest)
     rescue Puppet::Error => error
       puts error.message
       success = false
