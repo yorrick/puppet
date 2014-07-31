@@ -1,4 +1,8 @@
-define puppet::foreman::config::puppetmaster($foreman_url = undef) {
+define puppet::foreman::config::puppetmaster(
+  $foreman_url = undef,
+  $puppet_home = '/var/lib/puppet',
+  $puppet_user = 'puppet',
+  $facts = true) {
 
   include puppet
 
@@ -10,12 +14,25 @@ define puppet::foreman::config::puppetmaster($foreman_url = undef) {
     fail("Reporting::Foreman::Config::Puppetmaster[$foreman_url]: foreman_url must be a valid URL")
   }
 
+  file { '/etc/foreman':
+    ensure => directory
+  }
+
+  file { '/etc/foreman/puppet.yaml':
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template("${module_name}/foreman/etc/puppet.yaml.erb"),
+    require => File['/etc/foreman']
+  }
+
   file { '/usr/lib/ruby/site_ruby/1.8/puppet/reports/foreman.rb' :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${module_name}/foreman/reports/foreman.rb.erb"),
+    source  => "puppet:///modules/${module_name}/foreman.rb",
     notify  => Service['puppet']
   }
 
@@ -23,12 +40,12 @@ define puppet::foreman::config::puppetmaster($foreman_url = undef) {
     ensure  => file,
     owner   => root,
     group   => root,
-    mode    => '0750',
-    content => template("${module_name}/foreman/facts/push_facts_to_foreman.rb.erb")
+    mode    => '0755',
+    source  => "puppet:///modules/${module_name}/push_facts_to_foreman.rb"
   }
 
   cron { 'push_facts_to_foreman':
-    command => '/usr/local/scripts/push_facts_to_foreman.rb',
+    command => 'sudo -u puppet /usr/local/scripts/push_facts_to_foreman.rb --push-facts',
     user    => root,
     hour    => 2,
     minute  => 0,
