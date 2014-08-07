@@ -47,8 +47,8 @@ define puppet::foreman::config::puppetmaster(
   cron { 'push_facts_to_foreman':
     command => 'sudo -u puppet /usr/local/scripts/push_facts_to_foreman.rb --push-facts',
     user    => root,
-    hour    => 2,
-    minute  => 0,
+    hour    => '*',
+    minute  => '0,30',
     require => File['/usr/local/scripts/push_facts_to_foreman.rb']
   }
 
