@@ -60,6 +60,37 @@ Puppet::Reports.register_report(:foreman) do
     rescue Exception => e
       raise Puppet::Error, "Could not send report to Foreman at #{foreman_url}/api/reports: #{e}\n#{e.backtrace}"
     end
+
+    begin
+      uri = URI.parse(foreman_url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl     = uri.scheme == 'https'
+      if http.use_ssl?
+        if SETTINGS[:ssl_ca] && !SETTINGS[:ssl_ca].empty?
+          http.ca_file = SETTINGS[:ssl_ca]
+          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        else
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        if SETTINGS[:ssl_cert] && !SETTINGS[:ssl_cert].empty? && SETTINGS[:ssl_key] && !SETTINGS[:ssl_key].empty?
+          http.cert = OpenSSL::X509::Certificate.new(File.read(SETTINGS[:ssl_cert]))
+          http.key  = OpenSSL::PKey::RSA.new(File.read(SETTINGS[:ssl_key]), nil)
+        end
+      end
+      req = Net::HTTP::Post.new("#{uri.path}/api/hosts/facts")
+      req.add_field('Accept', 'application/json,version=2' )
+      req.content_type = 'application/json'
+      # Strip the Puppet:: ruby objects and keep the plain hash
+      filename = "#{SETTINGS[:puppetdir]}/yaml/facts/#{self.host}.yaml"
+      facts = File.read(filename)
+      certname = File.basename(filename, ".yaml")
+      puppet_facts = YAML::load(facts.gsub(/\!ruby\/object.*$/,''))
+      hostname = puppet_facts['values']['fqdn'] || certname
+      req.body = {'facts' => puppet_facts['values'], 'name' => hostname, 'certname' => certname}.to_json
+      response = http.request(req)
+    rescue Exception => e
+      raise Puppet::Error, "Could not send facts to Foreman at #{foreman_url}/api/hosts/facts: #{e}\n#{e.backtrace}"
+    end
   end
 
   def generate_report
@@ -179,6 +210,10 @@ Puppet::Reports.register_report(:foreman) do
 
   def foreman_url
     SETTINGS[:url] || raise(Puppet::Error, "Must provide URL in #{$settings_file}")
+  end
+
+  def puppetdir
+    SETTINGS[:puppetdir] || raise(Puppet::Error, "Must provide puppet base directory in #{$settings_file}")
   end
 
 end
