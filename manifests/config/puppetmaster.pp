@@ -16,9 +16,9 @@ class puppet::config::puppetmaster {
 
   file { '/etc/puppet/rack/config.ru':
     ensure  => file,
-    owner   => 'root',
+    owner   => 'puppet',
     group   => 'root',
-    mode    => '0644',
+    mode    => '0755',
     source  => "puppet:///modules/${module_name}/config.ru",
     require => File['/etc/puppet/rack']
   }
