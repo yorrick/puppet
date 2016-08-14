@@ -3,6 +3,7 @@ To install puppet on a fresh raspberry pi:
 - ssh pi@raspberrypi
 - sudo raspi-config
 - sudo dpkg-reconfigure tzdata
+- sudo echo 'deb http://apt.cegeka.be/puppetlabs/ wheezy main dependencies' >> /etc/apt/sources.list
 - sudo apt-get update
 - sudo apt-get install puppet-common
 - sudo apt-get install git
